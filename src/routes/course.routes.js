@@ -1,10 +1,12 @@
-const express = require("express");
+﻿const express = require("express");
 const router = express.Router();
-
-const courseController = require("../controllers/course.controller");
-const protect = require("../middleware/auth.middleware"); // 🔥 ADD THIS
-
-// 🔥 PROTECTED – browse courses with user context
-router.get("/", protect, courseController.getAllCourses);
-
+router.get("/", async (req, res) => {
+  try {
+    const Course = require("../models/Course");
+    const courses = await Course.find({});
+    res.json({ success: true, courses });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 module.exports = router;
